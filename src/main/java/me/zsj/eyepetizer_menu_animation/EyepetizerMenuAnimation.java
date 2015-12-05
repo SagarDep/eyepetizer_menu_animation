@@ -36,7 +36,6 @@ public class EyepetizerMenuAnimation implements View.OnClickListener{
         this.mInterpolator = new DecelerateInterpolator();
         this.mMenuOpenAnimation = buildMenuOpenAnimation();
         this.mMenuCloseAnimation = buildMenuCloseAnimation();
-        this.mActionMenuAnimation = buildActionMenuAnimation();
         mActionMenu.setOnClickListener(this);
         if (mIsMenuClose) {
             mEyepetizerMenuView.setVisibility(View.GONE);
@@ -45,6 +44,10 @@ public class EyepetizerMenuAnimation implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        mActionMenuAnimation = ObjectAnimator.ofFloat(
+                mActionMenu, ROTATION, mIsMenuClose ? 0 : 90, mIsMenuClose ? 90 : 0 );
+        mActionMenuAnimation.setInterpolator(mInterpolator);
+        mActionMenuAnimation.setDuration(350);
         if (mIsMenuClose) {
             open();
         }else {
@@ -64,14 +67,6 @@ public class EyepetizerMenuAnimation implements View.OnClickListener{
         AnimatorSet set = new AnimatorSet();
         set.playTogether(mActionMenuAnimation, mMenuCloseAnimation);
         set.start();
-    }
-
-    private ObjectAnimator buildActionMenuAnimation() {
-        mActionMenuAnimation = ObjectAnimator.ofFloat(
-                mActionMenu, ROTATION, mIsMenuClose ? 0 : 90, mIsMenuClose ? 90 : 0 );
-        mActionMenuAnimation.setInterpolator(mInterpolator);
-        mActionMenuAnimation.setDuration(350);
-        return mActionMenuAnimation;
     }
 
     private ObjectAnimator buildMenuOpenAnimation() {
